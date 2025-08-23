@@ -2,4 +2,4 @@
 publish = "frontEnd"
 
 [functions]
-directory = "netlify/backEnd"
+directory = "netlify/functions"
