@@ -1,9 +1,11 @@
 [build]
-publish = "frontEnd"
+    publish = "frontEnd"
 
 [functions]
-python_bundler = "pip"
-directory = "netlify/functions"
+  directory = "netlify/functions"
+
+  [functions.python_bundler]
+    command = "pip"
 
 [[redirects]]
   from = "/api/*"
