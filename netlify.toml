@@ -2,6 +2,7 @@
 publish = "frontEnd"
 
 [functions]
+python_bundler = "pip"
 directory = "netlify/functions"
 
 [[redirects]]
