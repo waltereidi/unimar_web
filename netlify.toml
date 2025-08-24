@@ -1,9 +1,6 @@
 [build]
-  command = "pip install -r requirements.txt"
+  command = "pip install -r requirements.txt && flask --app backEnd/api run"
   functions = "netlify/functions"
   publish = "frontEnd"
 
 
-  [dev]
-  command = "flask --app backEnd/api run"
-  port = 5000
