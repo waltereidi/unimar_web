@@ -3,7 +3,7 @@
   functions = "netlify/functions"
   publish = "frontEnd"
 
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/api/:splat"
-  status = 200
+
+  [dev]
+  command = "flask --app backEnd/api run"
+  port = 5000
