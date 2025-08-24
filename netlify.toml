@@ -1,11 +1,7 @@
 [build]
-    publish = "frontEnd"
-
-[functions]
-  directory = "netlify/functions"
-
-  [functions.python_bundler]
-    command = "pip"
+  command = "pip install -r requirements.txt"
+  functions = "netlify/functions"
+  publish = "public"
 
 [[redirects]]
   from = "/api/*"
