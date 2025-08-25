@@ -1,6 +1,9 @@
 from flask import Flask, jsonify
-
 app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
 
 @app.route('/api/hello', methods=['GET'])
 def hello():
@@ -16,4 +19,4 @@ def info():
 
 # Esta parte é apenas para desenvolvimento local
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run()
