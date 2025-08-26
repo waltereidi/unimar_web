@@ -13,7 +13,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copiar código da aplicação
-COPY backEnd/ ./src/
+COPY src/ ./src/
 COPY test_structure.py .
 
 # Criar diretório para banco de dados
@@ -28,5 +28,5 @@ ENV FLASK_ENV=production
 ENV PYTHONPATH=/app
 
 # Comando para iniciar a aplicação
-CMD ["python", "src/main.py"]
+CMD ["python", "app.py"]
 

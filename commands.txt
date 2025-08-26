@@ -1,4 +1,5 @@
  . .venv/bin/activate
 pip install -r requirements.txt
 
-flask --app backEnd/api run
+flask --app api run
+docker-compose -f docker-compose.dev.yml up -d
