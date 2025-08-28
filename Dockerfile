@@ -2,10 +2,10 @@
 FROM python:3.9 
  
 # Create the app directory
-RUN mkdir /app
+RUN mkdir /src
  
 # Set the working directory inside the container
-WORKDIR /app
+WORKDIR /src
  
 # Set environment variables 
 # Prevents Python from writing pyc files to disk
@@ -17,17 +17,17 @@ ENV PYTHONUNBUFFERED=1
 RUN pip install --upgrade pip 
  
 # Copy the Django project  and install dependencies
-COPY requirements.txt  /app/
+COPY requirements.txt  /src/
  
 # run this command to install all dependencies 
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install debugpy
 
 # Copy the Django project to the container
-COPY . /app/
+COPY . /src/
  
 # Expose the Django port
-EXPOSE 8000
+EXPOSE 5000
  
 # Run Django’s development server
 CMD ["python3.9", "debug.py", "--listen", "0.0.0.0:5678" , "--wait-for-client" , "-m"]
