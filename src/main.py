@@ -2,19 +2,18 @@ import os
 import sys
 # DON'T CHANGE THIS !!!
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-
+from sqlalchemy import create_engine
 from flask import Flask, send_from_directory, jsonify
 from flask_cors import CORS
 
 
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'frontEnd'))
 app.config['SECRET_KEY'] = 'asdf#FGSgvasgf$5$WGT'
-
+app.config['DEBUG'] = True
 # Configurar CORS para permitir requisições de qualquer origem
 CORS(app)
 
 # Registrar blueprints
-
 # Configuração do banco de dados
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(os.path.dirname(__file__), 'src/database', 'app.db')}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -22,6 +21,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
+
+
+
+
+
 def serve(path):
     static_folder_path = app.static_folder
     if static_folder_path is None:

@@ -1,22 +1,36 @@
-# Docker Compose simplificado para desenvolvimento
-# Apenas a API com SQLite (mais simples para demonstração)
-
-version: '3.8'
+version: "3.9"
 
 services:
-  # Serviço da API da Biblioteca
-  biblioteca-api:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  flask:
     build: .
+    container_name: flask-docker-dev
+    working_dir: /src
     ports:
       - "5000:5000"
+      - "5678:5678"
+    depends_on:
+      - db
+    command: flask run --host=0.0.0.0 --port=5000 --reload
+    env_file:
+      - .env
     environment:
-      - FLASK_ENV=development
-      - PYTHONPATH=/app
+      FLASK_APP: main.py
+      FLASK_ENV: development
     volumes:
-      - ./data:/app/src/database
-    restart: unless-stopped
-    container_name: biblioteca-api-container
+      - ./src:/src
 
 volumes:
-  data:
-
+  postgres_data:
