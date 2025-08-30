@@ -24,10 +24,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install debugpy
 
 # Copy the Django project to the container
-COPY . /src/
  
 # Expose the Django port
 EXPOSE 5000
  
 # Run Django’s development server
-CMD ["python3.9", "debug.py", "--listen", "0.0.0.0:5678" , "--wait-for-client" , "-m"]
+CMD [ "python", "-m", "debugpy", "--listen", "0.0.0.0:5678", "-m", "flask", "run", "--host=0.0.0.0", "--port=5000"]

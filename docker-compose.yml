@@ -16,18 +16,22 @@ services:
 
   flask:
     build: .
-    container_name: flask-docker
+    container_name: flask-docker-dev
     working_dir: /src
     ports:
       - "5000:5000"
       - "5678:5678"
     depends_on:
       - db
-    command: gunicorn --reload -w 4 -b 0.0.0.0:5000 main:app
+    command: python -m debugpy --listen 0.0.0.0:5678 --wait-for-client -m flask run --host=0.0.0.0 --port=5000 --reload --extra-files src/
     env_file:
       - .env
+    environment:
+      FLASK_APP: main.py
+      FLASK_ENV: development
     volumes:
-      - ./src:/src
+      - ./src:/src:cached  # no macOS/Windows
+      - ./src:/src:delegated  # pode melhorar performance
 
 volumes:
   postgres_data:
