@@ -16,3 +16,4 @@ setuptools
 sqlalchemy
 watchdog
 debugpy
+alembic
