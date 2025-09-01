@@ -12,3 +12,5 @@ runserver:
 
 build-dev:
 	docker-compose -f docker-compose.dev.yml  build
+runmigrations:
+	docker compose run flask db init && flask db migrate -m "criando tabelas iniciais" && flask db upgrade

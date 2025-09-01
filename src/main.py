@@ -2,6 +2,11 @@ import os
 import sys
 from flask import Flask, send_from_directory, jsonify, request
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from backEnd.infrastructure.models import db
+from backEnd.infrastructure.database.models import User, Product
+
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
@@ -10,37 +15,8 @@ app.config['SECRET_KEY'] = 'asdf#FGSgvasgf$5$WGT'
 app.config['DEBUG'] = True
 CORS(app)
 
-# Configuração do banco de dados
-app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(os.path.dirname(__file__), 'backEnd/database', 'app.db')}"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-# Inicializar SQLAlchemy
-from backEnd.database.models import db
-db.init_app(app)
-
-# Importar modelos para garantir que as tabelas sejam criadas
-from backEnd.models import User, Product
-
-# Criar tabelas do banco de dados
-def create_tables():
-    """Cria todas as tabelas do banco de dados"""
-    with app.app_context():
-        try:
-            # Tentar aplicar migrações primeiro
-            import subprocess
-            result = subprocess.run(['alembic', 'upgrade', 'head'], 
-                                  capture_output=True, text=True, cwd=os.path.dirname(os.path.dirname(__file__)))
-            if result.returncode == 0:
-                print("✅ Migrações aplicadas com sucesso")
-            else:
-                print("⚠️ Erro ao aplicar migrações, criando tabelas diretamente...")
-                db.create_all()
-                print("✅ Tabelas do banco de dados criadas com sucesso")
-        except Exception as e:
-            print(f"⚠️ Erro ao aplicar migrações: {e}")
-            print("📝 Criando tabelas diretamente...")
-            db.create_all()
-            print("✅ Tabelas do banco de dados criadas com sucesso")
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:postgres@localhost:5432/biblioteca4"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Debug remoto
 if os.environ.get("DEBUGPY") == "1":
@@ -50,6 +26,10 @@ if os.environ.get("DEBUGPY") == "1":
         sys._debugpy_started = True
         print("🔹 debugpy listening on port 5678")
         app.config['TEMPLATES_AUTO_RELOAD'] = True
+
+
+db.init_app(app)
+migrate = Migrate(app, db)
 
 # Importar e registrar blueprints das rotas
 def register_blueprints():
@@ -118,6 +98,4 @@ def serve(path):
 
 if __name__ == '__main__':
     # Criar tabelas do banco de dados
-    create_tables()
-    
     app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=True)

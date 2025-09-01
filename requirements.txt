@@ -16,4 +16,4 @@ setuptools
 sqlalchemy
 watchdog
 debugpy
-alembic
+psycopg2-binary
