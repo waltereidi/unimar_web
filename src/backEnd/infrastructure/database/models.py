@@ -4,8 +4,15 @@ class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    encrypted_password = db.Column(db.String(128), nullable=False)
+    
 
-class Product(db.Model):
-    __tablename__ = 'products'
+class Books(db.Model):
+    __tablename__ = 'books'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
+    title = db.Column(db.String(50), nullable=False)
+    author = db.Column(db.String(120), nullable=False)
+    published_date = db.Column(db.Date, nullable=True)
+    isbn = db.Column(db.String(13), unique=True, nullable=True)
+

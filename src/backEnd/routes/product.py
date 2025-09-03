@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from sqlalchemy import text
 
 product_bp = Blueprint('product', __name__)
 

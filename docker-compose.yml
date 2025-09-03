@@ -13,6 +13,8 @@ services:
       - postgres_data:/var/lib/postgresql/data
     env_file:
       - .env
+    networks:
+      - backend_net
 
   flask:
     build: .
@@ -32,6 +34,12 @@ services:
     volumes:
       - ./src:/src:cached  # no macOS/Windows
       - ./src:/src:delegated  # pode melhorar performance
+    networks:
+      - backend_net
 
 volumes:
   postgres_data:
+
+networks:
+  backend_net:
+    driver: bridge

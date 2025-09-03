@@ -4,18 +4,19 @@ from flask import Flask, send_from_directory, jsonify, request
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from backEnd.infrastructure.models import db
 from backEnd.infrastructure.database.models import User, Product
+from sqlalchemy import text
 
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'backEnd/defaultPages'))
 app.config['SECRET_KEY'] = 'asdf#FGSgvasgf$5$WGT'
 app.config['DEBUG'] = True
 CORS(app)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:postgres@localhost:5432/biblioteca4"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:postgres@db:5432/biblioteca4"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Debug remoto
@@ -27,9 +28,13 @@ if os.environ.get("DEBUGPY") == "1":
         print("🔹 debugpy listening on port 5678")
         app.config['TEMPLATES_AUTO_RELOAD'] = True
 
-
 db.init_app(app)
 migrate = Migrate(app, db)
+
+with app.app_context():
+    db.create_all()
+
+
 
 # Importar e registrar blueprints das rotas
 def register_blueprints():
