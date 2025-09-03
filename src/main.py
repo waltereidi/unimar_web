@@ -1,14 +1,17 @@
 import os
 import sys
-from flask import Flask, send_from_directory, jsonify, request
+from flask import Flask, send_from_directory, jsonify, request, session
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from backEnd.infrastructure.models import db
-from backEnd.infrastructure.database.models import User, Product
+from backEnd.infrastructure.database.models import User, Books
 from sqlalchemy import text
-
+from flask_caching import Cache
+from flask_jwt_extended import (
+    JWTManager, create_access_token, jwt_required, get_jwt_identity
+)
 
 
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'backEnd/defaultPages'))
@@ -28,13 +31,19 @@ if os.environ.get("DEBUGPY") == "1":
         print("🔹 debugpy listening on port 5678")
         app.config['TEMPLATES_AUTO_RELOAD'] = True
 
+config = {
+    "DEBUG": True,          # some Flask specific configs
+    "CACHE_TYPE": "SimpleCache",  # Flask-Caching related configs
+    "CACHE_DEFAULT_TIMEOUT": 300
+}
+
 db.init_app(app)
 migrate = Migrate(app, db)
 
 with app.app_context():
     db.create_all()
 
-
+jwt = JWTManager(app)
 
 # Importar e registrar blueprints das rotas
 def register_blueprints():
