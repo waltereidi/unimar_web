@@ -18,3 +18,5 @@ build-dev:
 	docker-compose -f docker-compose.dev.yml  build
 runvue:
 	docker compose run  -p 5173:5173 vue npm install && npm run dev -- --host 0.0.0.0 --remove-orphans
+install:
+	apt update && apt install docker.io && systemctl start docker && systemctl enable docker 
