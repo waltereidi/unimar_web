@@ -17,4 +17,4 @@ runserver:
 build-dev:
 	docker-compose -f docker-compose.dev.yml  build
 runvue:
-	docker compose run vue npm install && npm run dev -- --host 0.0.0.0
+	docker compose run  -p 5173:5173 vue npm install && npm run dev -- --host 0.0.0.0 --remove-orphans

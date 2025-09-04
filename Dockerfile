@@ -28,7 +28,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install debugpy
 
 # Expose Django/Flask port
-EXPOSE 5000
+EXPOSE 5000 5173
 
 # Run Django’s development server with debugpy
 CMD [ "python", "-m", "debugpy", "--listen", "0.0.0.0:5678", "-m", "flask", "run", "--host=0.0.0.0", "--port=5000"]
