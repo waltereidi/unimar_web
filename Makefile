@@ -1,13 +1,15 @@
 build:
-	docker compose build
+	docker compose -f docker-compose.dev.yml up --build
+build-prod:
+	docker compose -f docker-compose.prod.yml up --build -d
 run:
-	docker compose up -d --remove-orphans 
+	docker compose -f docker-compose.dev.yml up -d --remove-orphans 
 stop:
 	docker compose stop
 bash:
-	docker compose exec -it flask bash
+	docker compose exec  -it flask bash
 bashvue:
-	docker compose exec -it vue bash
+	docker compose -f docker-compose.dev.yml exec -it vue bash
 bashdb: 
 	docker compose exec -it db bash
 runserver:
