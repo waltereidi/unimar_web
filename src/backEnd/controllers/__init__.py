@@ -2,7 +2,7 @@
 # Este arquivo facilita a importação dos blueprints
 
 from .user import user_bp
-from .books import product_bp
+from .books import book_bp
 
 # Lista de todos os blueprints disponíveis
-__all__ = ['user_bp', 'product_bp']
+__all__ = ['user_bp', 'book_bp']

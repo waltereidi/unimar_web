@@ -5,7 +5,7 @@ build-prod:
 run:
 	docker compose -f docker-compose.dev.yml up -d --remove-orphans 
 stop:
-	docker compose stop
+	docker compose -f docker-compose.dev.yml stop
 bash:
 	docker compose exec  -it flask bash
 bashvue:

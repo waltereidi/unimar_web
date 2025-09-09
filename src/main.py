@@ -48,11 +48,11 @@ jwt = JWTManager(app)
 # Importar e registrar blueprints das rotas
 def register_blueprints():
     """Registra todos os blueprints da pasta routes"""
-    routes_path = os.path.join(os.path.dirname(__file__), 'backEnd', 'routes')
+    routes_path = os.path.join(os.path.dirname(__file__), 'backEnd', 'controllers')
     
     # Importar blueprints existentes
     try:
-        from backEnd.routes.user import user_bp
+        from backEnd.controllers.user import user_bp
         app.register_blueprint(user_bp, url_prefix='/api')
         print("✅ Blueprint 'user' registrado com sucesso")
     except ImportError as e:
@@ -66,13 +66,13 @@ def register_blueprints():
         
         try:
             # Importar o módulo routes
-            routes_module = importlib.import_module('backEnd.routes')
+            routes_module = importlib.import_module('backEnd.controllers')
             
             # Procurar por blueprints em todos os módulos da pasta routes
             for _, module_name, _ in pkgutil.iter_modules([routes_path]):
                 if module_name != '__init__':
                     try:
-                        module = importlib.import_module(f'backEnd.routes.{module_name}')
+                        module = importlib.import_module(f'backEnd.controllers.{module_name}')
                         
                         # Procurar por atributos que terminam com '_bp' (blueprint)
                         for attr_name in dir(module):
