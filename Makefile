@@ -7,7 +7,7 @@ run:
 stop:
 	docker compose -f docker-compose.dev.yml stop
 bash:
-	docker compose exec  -it flask bash
+	docker compose -f docker-compose.dev.yml exec -it flask bash
 bashvue:
 	docker compose -f docker-compose.dev.yml exec -it vue bash
 bashdb: 

@@ -19,3 +19,5 @@ debugpy
 psycopg2-binary
 flask_caching
 flask_jwt_extended
+Flask-Injector 
+injector

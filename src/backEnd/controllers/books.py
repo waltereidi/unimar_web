@@ -3,20 +3,26 @@ from sqlalchemy import text , create_engine
 from sqlalchemy.orm import sessionmaker
 from backEnd.infrastructure.database.models import Books 
 from backEnd.infrastructure.database import db
+from flask_sqlalchemy import SQLAlchemy
+from injector import inject
 
 book_bp = Blueprint('book', __name__)
 
 
 
 @book_bp.route('/books', methods=['GET'])
-def get_books():
+def get_books(db: SQLAlchemy):
     print(db)
+    
     books = db.session.query(Books).all()  # use db.session
+    
+        
     return jsonify([{
         "id": b.id,
         "title": b.title,
         "author": b.author
     } for b in books])
+
 
 def getBookDescription(book_id):
     

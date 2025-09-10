@@ -8,11 +8,12 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from backEnd.infrastructure.models import db
 from backEnd.infrastructure.database.models import User, Books
 from sqlalchemy import text
+from injector import Binder
+from flask_injector import FlaskInjector
 from flask_caching import Cache
 from flask_jwt_extended import (
     JWTManager, create_access_token, jwt_required, get_jwt_identity
 )
-
 
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'backEnd/defaultPages'))
 app.config['SECRET_KEY'] = 'asdf#FGSgvasgf$5$WGT'
@@ -91,6 +92,13 @@ def register_blueprints():
 
 # Registrar blueprints
 register_blueprints()
+# Configurar injeção de dependência
+
+def configure(binder: Binder) -> None:
+    binder.bind(SQLAlchemy, to=db, scope=request)
+    
+FlaskInjector(app=app, modules=[configure])
+
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
@@ -109,7 +117,10 @@ def serve(path):
             return send_from_directory(static_folder_path, 'notFound404.html')
         else:
             return "index.html not found", 404
-
+    
+    
 if __name__ == '__main__':
     # Criar tabelas do banco de dados
     app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=True)
+
+

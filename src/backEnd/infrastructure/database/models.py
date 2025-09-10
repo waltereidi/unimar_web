@@ -15,4 +15,10 @@ class Books(db.Model):
     author = db.Column(db.String(120), nullable=False)
     published_date = db.Column(db.Date, nullable=True)
     isbn = db.Column(db.String(13), unique=True, nullable=True)
+    thumbUrl = db.Column(db.String(255), nullable=True)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, server_default=db.func.now(), onupdate=db )
+    
+
+        
 
