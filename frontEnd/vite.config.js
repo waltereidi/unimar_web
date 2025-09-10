@@ -15,4 +15,14 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  server: {
+    host: true, // permite acesso externo (ex: EC2, domínio)
+  },
+  preview: {
+    allowedHosts: [
+      'www.livrosexpo.site', // domínio liberado
+      'livrosexpo.site', // domínio liberado
+    ],
+    port: 4173, // pode mudar se quiser
+  },
 })
