@@ -16,7 +16,9 @@ services:
       - backend_net
       
   flask:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
     container_name: flask-docker-dev
     working_dir: /src
     ports:
@@ -35,7 +37,9 @@ services:
     networks:
       - backend_net
   vue:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
     image: node:22
     container_name: vue-docker-dev
     working_dir: /frontEnd
