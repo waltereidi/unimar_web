@@ -118,6 +118,17 @@ def serve(path):
         else:
             return "index.html not found", 404
     
+@app.before_request
+def before_request_middleware():
+    print(f"Middleware BEFORE: {request.method} {request.path}")
+
+# Middleware para modificar a resposta
+@app.after_request
+def after_request_middleware(response):
+    response.headers['X-Custom-Header'] = 'MeuMiddleware'
+    print(f"Middleware AFTER: status {response.status_code}")
+    return response
+
     
 if __name__ == '__main__':
     # Criar tabelas do banco de dados

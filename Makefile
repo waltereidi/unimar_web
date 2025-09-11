@@ -11,7 +11,7 @@ bash:
 bashvue:
 	docker compose -f docker-compose.dev.yml exec -it vue bash
 bashdb: 
-	docker compose exec -it db bash
+	docker compose -f docker-compose.prod.yml exec -it db bash
 runserver:
 	docker compose run -p 5000:5000 flask gunicorn -w 4 -b 0.0.0.0:5000 main:app
 build-dev:
