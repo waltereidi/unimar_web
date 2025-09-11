@@ -1,0 +1,69 @@
+# ================================
+# Redirect HTTP -> HTTPS (Frontend)
+# ================================
+server {
+    listen 80;
+    listen [::]:80;
+    server_name livrosexpo.site www.livrosexpo.site;
+
+    return 301 https://$host$request_uri;
+}
+
+# ================================
+# Redirect HTTP -> HTTPS (Backend API)
+# ================================
+server {
+    listen 80;
+    listen [::]:80;
+    server_name api.livrosexpo.site;
+
+    return 301 https://$host$request_uri;
+}
+
+# ================================
+# Frontend (Vite - porta 5173)
+# ================================
+server {
+    server_name livrosexpo.site www.livrosexpo.site;
+
+    listen 443 ssl;
+    listen [::]:443 ssl;
+
+    ssl_certificate /etc/letsencrypt/live/livrosexpo.site/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/livrosexpo.site/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    location / {
+        proxy_pass http://127.0.0.1:5173;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+
+# ================================
+# Backend (API - porta 5000)
+# ================================
+server {
+    server_name api.livrosexpo.site;
+
+    listen 443 ssl;
+    listen [::]:443 ssl;
+
+    ssl_certificate /etc/letsencrypt/live/livrosexpo.site/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/livrosexpo.site/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    location / {
+        proxy_pass http://127.0.0.1:5000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
