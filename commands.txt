@@ -4,5 +4,7 @@ pip install -r requirements.txt
 flask --app api run
 docker-compose -f docker-compose.dev.yml up -d
 
-pytest -v backEnd/tests/controllers/test_login.py
+pytest -v tests/controllers/test_login.py
+python -m debugpy --listen 5678 --wait-for-client -m pytest -v tests/controllers/test_login.py
 
+pytest -s -v tests/service/criptografia/test_criptografia_simatrica.py 
