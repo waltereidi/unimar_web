@@ -3,3 +3,6 @@ pip install -r requirements.txt
 
 flask --app api run
 docker-compose -f docker-compose.dev.yml up -d
+
+pytest -v backEnd/tests/controllers/test_login.py
+

@@ -50,15 +50,7 @@ jwt = JWTManager(app)
 def register_blueprints():
     """Registra todos os blueprints da pasta routes"""
     routes_path = os.path.join(os.path.dirname(__file__), 'backEnd', 'controllers')
-    
-    # Importar blueprints existentes
-    try:
-        from backEnd.controllers.user import user_bp
-        app.register_blueprint(user_bp, url_prefix='/api')
-        print("✅ Blueprint 'user' registrado com sucesso")
-    except ImportError as e:
-        print(f"⚠️ Erro ao importar blueprint 'user': {e}")
-    
+   
     # Função para registrar automaticamente novos blueprints
     def auto_register_blueprints():
         """Registra automaticamente todos os blueprints encontrados na pasta routes"""
