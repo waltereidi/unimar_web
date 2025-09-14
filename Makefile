@@ -20,3 +20,5 @@ runvue:
 	docker compose run  -p 5173:5173 vue npm install && npm run build  --remove-orphans
 install:
 	apt update && apt install docker.io && systemctl start docker && systemctl enable docker 
+test:
+	docker compose -f docker-compose.dev.yml run  flask python3 -m debugpy --listen 5678 --wait-for-client  -m pytest -v backEnd/tests/controllers/test_login.py

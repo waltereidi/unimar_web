@@ -23,6 +23,5 @@ export default defineConfig({
       'www.livrosexpo.site', // domínio liberado
       'livrosexpo.site', // domínio liberado
     ],
-    port: 4173, // pode mudar se quiser
   },
 })

@@ -14,14 +14,10 @@ book_bp = Blueprint('book', __name__)
 def get_books(db: SQLAlchemy):
     print(db)
     
-    books = db.session.query(Books).all()  # use db.session
+    
     
         
-    return jsonify([{
-        "id": b.id,
-        "title": b.title,
-        "author": b.author
-    } for b in books])
+    return jsonify('2')
 
 
 def getBookDescription(book_id):

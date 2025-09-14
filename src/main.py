@@ -14,6 +14,9 @@ from flask_caching import Cache
 from flask_jwt_extended import (
     JWTManager, create_access_token, jwt_required, get_jwt_identity
 )
+import threading
+
+
 
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'backEnd/defaultPages'))
 app.config['SECRET_KEY'] = 'asdf#FGSgvasgf$5$WGT'
@@ -50,15 +53,7 @@ jwt = JWTManager(app)
 def register_blueprints():
     """Registra todos os blueprints da pasta routes"""
     routes_path = os.path.join(os.path.dirname(__file__), 'backEnd', 'controllers')
-    
-    # Importar blueprints existentes
-    try:
-        from backEnd.controllers.user import user_bp
-        app.register_blueprint(user_bp, url_prefix='/api')
-        print("✅ Blueprint 'user' registrado com sucesso")
-    except ImportError as e:
-        print(f"⚠️ Erro ao importar blueprint 'user': {e}")
-    
+   
     # Função para registrar automaticamente novos blueprints
     def auto_register_blueprints():
         """Registra automaticamente todos os blueprints encontrados na pasta routes"""
@@ -96,9 +91,18 @@ register_blueprints()
 
 def configure(binder: Binder) -> None:
     binder.bind(SQLAlchemy, to=db, scope=request)
-    
-FlaskInjector(app=app, modules=[configure])
 
+def run_watcher():
+    from backEnd.watcher import start_watcher 
+    start_watcher(".")
+     
+FlaskInjector(app=app, modules=[configure])
+    
+if __name__ == 'main':
+    watcher_thread = threading.Thread(target=run_watcher, daemon=True)
+    watcher_thread.start()
+    # Criar tabelas do banco de dados
+    app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=True)
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
@@ -129,9 +133,5 @@ def after_request_middleware(response):
     print(f"Middleware AFTER: status {response.status_code}")
     return response
 
-    
-if __name__ == '__main__':
-    # Criar tabelas do banco de dados
-    app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=True)
 
 

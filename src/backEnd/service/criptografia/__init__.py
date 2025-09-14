@@ -1,9 +1,7 @@
 # Arquivo __init__.py para a pasta routes
 # Este arquivo facilita a importação dos blueprints
 
-from .user import user_bp
-from .books import book_bp
-from .login import login_bp
+from .criptografia_simetrica import CriptografiaSimetrica
 
 # Lista de todos os blueprints disponíveis
-__all__ = ['user_bp', 'book_bp' , 'login_bp']
+__all__ = ['CriptografiaSimetrica']
