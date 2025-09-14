@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue' // importe a página de login
+import { useAuthStore } from '@/stores/auth'
 
 // Simulação de estado de autenticação
 // depois você pode trocar por Pinia/Vuex ou checar token no localStorage
-let isAuthenticated = false
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -35,9 +36,14 @@ const router = createRouter({
 
 // Guard global de autenticação
 router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth && !isAuthenticated) {
+  const authStore = useAuthStore()
+  console.log(authStore.token)
+
+  if (to.meta.requiresAuth && !authStore.token) {
     next({ name: 'login' })
-  } else {
+  } else if(to.name === 'login') {
+    next('/')
+  }else{
     next()
   }
 

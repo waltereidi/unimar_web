@@ -13,11 +13,8 @@ book_bp = Blueprint('book', __name__)
 @book_bp.route('/books', methods=['GET'])
 def get_books(db: SQLAlchemy):
     print(db)
-    
-    
-    
-        
-    return jsonify('2')
+
+    return jsonify('1')
 
 
 def getBookDescription(book_id):

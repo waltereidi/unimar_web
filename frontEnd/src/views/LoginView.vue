@@ -13,7 +13,7 @@
           required
           :class="{ invalid: errors.email }
           "
-          placeholder="seu@exemplo.com"
+          placeholder="seu@email.com"
         />
         <small v-if="errors.email" class="error">{{ errors.email }}</small>
       </label>
@@ -59,6 +59,11 @@
 
 <script setup>
 import { reactive, ref } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+
+
+const authStore = useAuthStore()
+
 const API_URL = import.meta.env.VITE_API_URL
 
 const emit = defineEmits(['success', 'forgot', 'register'])
@@ -113,8 +118,11 @@ async function onSubmit() {
       serverError.value = body?.message || 'Falha ao autenticar. Verifique suas credenciais.'
     } else {
       const data = await res.json().catch(() => ({}))
+      
+      authStore.setToken(data.token)
       // Exemplo: emitir token/usuário para o pai
       emit('success', data)
+      router.push({ name: 'Home' })
       // você pode redirecionar aqui, armazenar token em localStorage, etc.
     }
   } catch (err) {

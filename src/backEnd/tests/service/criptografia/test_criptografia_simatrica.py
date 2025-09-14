@@ -2,7 +2,7 @@ import pytest
 from backEnd.service.criptografia.criptografia_simetrica import CriptografiaSimetrica  # Substitua pelo caminho correto do seu arquivo
 
 def test_criptografia_descriptografia():
-    mensagem = "123"
+    mensagem = "TestCase123"
 
     # Cria uma instância da classe
     cript = CriptografiaSimetrica()
@@ -14,7 +14,7 @@ def test_criptografia_descriptografia():
     assert criptografado != mensagem.encode('utf-8')
 
     # Descriptografa a mensagem
-    original = cript.descriptografar('criptografado')
+    original = cript.descriptografar(criptografado)
 
     # Verifica se a descriptografia retorna a mensagem original
     assert original == mensagem

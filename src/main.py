@@ -75,7 +75,7 @@ def register_blueprints():
                             if attr_name.endswith('_bp'):
                                 blueprint = getattr(module, attr_name)
                                 if hasattr(blueprint, 'name'):
-                                    app.register_blueprint(blueprint, url_prefix='/api')
+                                    app.register_blueprint(blueprint, url_prefix=f"/api/{blueprint.name}")
                                     print(f"✅ Blueprint '{blueprint.name}' registrado automaticamente")
                     except Exception as e:
                         print(f"⚠️ Erro ao registrar blueprint do módulo '{module_name}': {e}")
