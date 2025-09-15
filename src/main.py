@@ -14,6 +14,7 @@ from flask_caching import Cache
 from flask_jwt_extended import (
     JWTManager, create_access_token, jwt_required, get_jwt_identity
 )
+
 import threading
 
 
@@ -95,7 +96,8 @@ def configure(binder: Binder) -> None:
 def run_watcher():
     from backEnd.watcher import start_watcher 
     start_watcher(".")
-     
+
+
 FlaskInjector(app=app, modules=[configure])
     
 if __name__ == 'main':

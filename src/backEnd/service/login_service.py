@@ -6,6 +6,7 @@ from backEnd.infrastructure.database.models import User
 from sqlalchemy import text , create_engine
 from backEnd.service.criptografia import CriptografiaSimetrica , JWTManager
 
+
 class LoginService:
     def __init__(self , db: SQLAlchemy):
         self.db = db
@@ -32,6 +33,19 @@ class LoginService:
                         "message": "Sucesso ao realizar Login" , 
                         "success": True , 
                         "token" : jwt.generate_token({"email": user.email}) ,
+                        "email" : user.email ,
                         "data": None 
                     }
+    def validate_token(self , json:str )    :
+        
+        jwt = JWTManager()
+        token = json.get("token")
+        
+        try:
+            decoded = jwt.validate_token(token)
+            return {"message": "Token válido", "success": True}
+        
+        except ValueError as e:
+            return {"message": str(e), "success": False}
+
         

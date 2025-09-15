@@ -60,11 +60,10 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
-
+import { AuthenticationRequests }  from '@/service/authenticationRequests'
 
 const authStore = useAuthStore()
 
-const API_URL = import.meta.env.VITE_API_URL
 
 const emit = defineEmits(['success', 'forgot', 'register'])
 
@@ -106,12 +105,9 @@ async function onSubmit() {
   serverError.value = ''
 
   try {
-    // Substitua a URL abaixo pela sua API real
-    const res = await fetch(`${API_URL}/login/authentication`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: form.email, password: form.password, remember: form.remember }),
-    })
+    
+    var authRequests  = new AuthenticationRequests()
+    var res = authRequests.loginAuthentication(form.email, form.password) 
 
     if (!res.ok) {
       const body = await res.json().catch(() => null)

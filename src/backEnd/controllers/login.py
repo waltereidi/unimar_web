@@ -6,6 +6,7 @@ from sqlalchemy import text , create_engine
 from sqlalchemy.orm import sessionmaker
 from injector import inject
 from backEnd.service.login_service import LoginService
+from backEnd.controllers.functool.jwt_authentication import jwtAuthentication
 
 login_bp = Blueprint('login', __name__)
 
@@ -18,6 +19,12 @@ def authenticationd(db: SQLAlchemy):
         return jsonify(result  ), 401
     else :                     
         return jsonify(result ), 200 
+
+@login_bp.route('/validate_token', methods=['POST'])
+@jwtAuthentication
+def validate_token():
+    return jsonify( { "success" : True }  ), 200
+    
 
 @login_bp.route('/logout', methods=['GET'])
 def logout():
