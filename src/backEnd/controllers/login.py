@@ -25,7 +25,7 @@ def authenticationd(db: SQLAlchemy):
 def validate_token():
     return jsonify( { "success" : True }  ), 200
     
-
+    
 @login_bp.route('/logout', methods=['GET'])
 def logout():
     print('retorno db:')

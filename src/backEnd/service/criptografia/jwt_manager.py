@@ -30,6 +30,6 @@ class JWTManager:
             decoded = jwt.decode(token, self.secret_key, algorithms=["HS256"])
             return decoded
         except jwt.ExpiredSignatureError:
-            raise ValueError("Token expirado")
+            raise jwt.ExpiredSignatureError("Token expirado")
         except jwt.InvalidTokenError:
-            raise ValueError("Token inválido")
+            raise jwt.InvalidTokenError("Token inválido")

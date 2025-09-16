@@ -36,23 +36,40 @@ const router = createRouter({
 })
 
 // Guard global de autenticação
-router.beforeEach((to, from, next) => {
+
+router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
-  const authRequest = new AuthenticationRequests()
-  
-  var isValid = authRequest.validateToken(authStore.token ?? "")
-  console.log("validando token")
-  console.log(isValid)
-  if (to.meta.requiresAuth && !authStore.token && isValid.ok ) {
-    next({ name: 'login' })
-  } else if(to.name === 'login') {
-    next('/')
 
-  }else{
-    next()
+  // Se a rota é "login" e não tem token → deixa entrar
+  if (to.meta.name === 'login' && (!authStore.token || authStore.token === "")) {
+    return next()
+  }
+  if (!authStore.token && to.name !== 'login') {
+  console.log("Sem token → redirecionando para login")
+  return next({ name: 'login' })
+}
 
+  // Se não tem token e não está indo para login → redireciona
+  if (!authStore.token || authStore.token === "") {
+    console.log("Sem token → redirecionando para login")
+    return next({ name: 'login' })
   }
 
+  // Se tem token, valida com o backend
+  try {
+    const isValid = await authRequest.validateToken(authStore.token)
+
+    if (to.meta.requiresAuth && (isValid.error || isValid.success === false)) {
+      authStore.clearToken()
+      return next({ name: 'login' })
+    }
+
+    return next()
+  } catch (err) {
+    console.error("Erro ao validar token:", err)
+    authStore.clearToken()
+    return next({ name: 'login' })
+  }
 })
 
 

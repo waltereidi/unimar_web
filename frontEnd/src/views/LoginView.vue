@@ -106,7 +106,7 @@ async function onSubmit() {
 
   try {
     
-    var authRequests  = new AuthenticationRequests()
+    var authRequests  = new AuthenticationRequests(1)
     var res = authRequests.loginAuthentication(form.email, form.password) 
 
     if (!res.ok) {
