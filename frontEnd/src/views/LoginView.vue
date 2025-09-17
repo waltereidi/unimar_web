@@ -61,6 +61,8 @@
 import { reactive, ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { AuthenticationRequests }  from '@/service/authenticationRequests'
+import { useToast } from "vue-toastification";
+import router  from "@/router/index";
 
 const authStore = useAuthStore()
 
@@ -100,29 +102,27 @@ function validate() {
 
 async function onSubmit() {
   if (!validate()) return
+  const toast = useToast();
 
   loading.value = true
   serverError.value = ''
 
   try {
     
-    var authRequests  = new AuthenticationRequests(1)
-    var res = authRequests.loginAuthentication(form.email, form.password) 
-
-    if (!res.ok) {
-      const body = await res.json().catch(() => null)
-      serverError.value = body?.message || 'Falha ao autenticar. Verifique suas credenciais.'
-    } else {
-      const data = await res.json().catch(() => ({}))
-      
-      authStore.setToken(data.token)
-      // Exemplo: emitir token/usuário para o pai
-      emit('success', data)
-      router.push({ name: 'Home' })
-      // você pode redirecionar aqui, armazenar token em localStorage, etc.
-    }
+    var authRequests  = new AuthenticationRequests()
+    var res = await authRequests.loginAuthentication(form.email, form.password) 
+    if(!res.ok)
+      throw 'Usuário ou senha inválidos';
+    
+    toast.success("Login efetuado com sucesso")
+    emit('success')
+    router.push({ name: 'home' })
+    // você pode redirecionar aqui, armazenar token em localStorage, etc.
+    
   } catch (err) {
-    serverError.value = 'Erro de rede. Tente novamente.'
+    serverError.value = 'Usuário ou senha inválidos';
+    toast.error(serverError.value);
+
   } finally {
     loading.value = false
   }

@@ -5,7 +5,12 @@ export class Request  {
         this.authStore = useAuthStore();
         this.API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
     }
-
+    setToken(token ){
+        this.authStore.setToken(token );
+    }
+    clearToken(){
+        this.authStore.clearToken();
+    }
     getDefaultHeaders() {
         return {
         'Content-Type': 'application/json',
@@ -16,8 +21,9 @@ export class Request  {
     }
 
     withAuth(headers = {}) {
-
+    console.log(headers)
     headers['Authorization'] = `Bearer ${this.authStore.token ?? ""}`;
+    console.log(headers)
     return headers;
     }
 
@@ -32,12 +38,14 @@ export class Request  {
     }
 
     async post(endpoint = '', body = {}, headers = {}) {
-    headers = this.withAuth({ ...this.getDefaultHeaders(), ...headers });
-    const response = await fetch(`${this.API_URL}${endpoint}`, {
-        method: 'POST',
-        headers:headers,
-        body: JSON.stringify(body),
-    });
-    return response.json();
+        headers = this.withAuth(headers);
+
+        const response = fetch(`${this.API_URL}${endpoint}`, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(body),
+        });
+    
+        return response;
     }
 }

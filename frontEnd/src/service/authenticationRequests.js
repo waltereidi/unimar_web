@@ -1,23 +1,35 @@
 import { Request } from '@/service/request.js'
-
+import Toast, { POSITION } from "vue-toastification";
 export class AuthenticationRequests extends Request {
 
     constructor() {
         super();
     }
 
-    async loginAuthentication()
+    async loginAuthentication(email , password)
     {
         // const res = await fetch(`${this.API_URL}/login/authentication`, {
         // method: 'POST',
         // headers: { 'Content-Type': 'application/json' },
         // body: JSON.stringify({ email: form.email, password: form.password, remember: form.remember }),
         // })
+        var body ={ email: email, password:password };
 
-        var res = super.post(`/login/authentication` , 
-            JSON.stringify({ email: form.email, password: form.password, remember: form.remember }),
-            super.getDefaultHeaders()
-        )
+        var headers = super.getDefaultHeaders();
+
+        var res =  await super.post(`/login/authentication` , 
+            body,
+            headers
+        );
+        console.log(res)
+        if(res.status === 200  ){
+            var body = await res.json();
+            
+            super.setToken(body.token);
+        }else{
+            super.clearToken();
+        }
+        
         return res
 
     }
