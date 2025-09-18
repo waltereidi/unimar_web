@@ -1,0 +1,65 @@
+
+CREATE TABLE resultado_lavoura_permanente (
+    ano TEXT,
+    sigla_uf TEXT,
+    id_municipio TEXT,
+    produto TEXT,
+    area_destinada_colheita TEXT,
+    area_colhida TEXT,
+    quantidade_produzida TEXT,
+    rendimento_medio_producao TEXT,
+    valor_producao TEXT
+);
+
+--PSQL
+\copy resultado_lavoura_permanente
+FROM PROGRAM 'awk -F";" ''{
+    # número esperado de colunas
+    n = 9;
+
+    # preenche campos faltantes com "NULL"
+    for(i=1;i<=n;i++){
+        if($i=="") $i="NULL";
+    }
+
+    # imprime a linha novamente com ; como separador
+    for(i=1;i<n;i++) printf("%s;", $i);
+    print $n;
+}'' /home/br_ibge_pam_lavoura_permanente.csv' 
+DELIMITER ';' CSV HEADER;
+
+---LIMPEZA DE DADOS
+CREATE TABLE resultado_lavoura_permanente_limpo (
+    ano TEXT,
+    sigla_uf TEXT,
+    id_municipio TEXT,
+    produto TEXT,
+    area_destinada_colheita NUMERIC,
+    area_colhida NUMERIC,
+    quantidade_produzida NUMERIC,
+    rendimento_medio_producao NUMERIC,
+    valor_producao NUMERIC
+);
+
+INSERT INTO resultado_lavoura_permanente_limpo (
+    ano,
+    sigla_uf,
+    id_municipio,
+    produto,
+    area_destinada_colheita,
+    area_colhida,
+    quantidade_produzida,
+    rendimento_medio_producao,
+    valor_producao
+)
+SELECT
+    ano,
+    sigla_uf,
+    id_municipio,
+    produto,
+    NULLIF(area_destinada_colheita,'NULL')::NUMERIC,
+    NULLIF(area_colhida,'NULL')::NUMERIC,
+    NULLIF(quantidade_produzida,'NULL')::NUMERIC,
+    NULLIF(rendimento_medio_producao,'NULL')::NUMERIC,
+    NULLIF(valor_producao,'NULL')::NUMERIC
+FROM resultado_lavoura_permanente;

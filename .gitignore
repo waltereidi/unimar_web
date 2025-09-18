@@ -1,1 +1,2 @@
 .venv/*
+postgres_data/br_ibge_pam_lavoura_permanente.csv
