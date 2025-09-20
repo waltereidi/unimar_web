@@ -106,24 +106,6 @@ if __name__ == 'main':
     # Criar tabelas do banco de dados
     app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=True)
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def serve(path):
-    static_folder_path = app.static_folder
-    print(app.static_folder)
-    if static_folder_path is None:
-            return "Static folder not configured", 404
-
-    if path != "" and os.path.exists(os.path.join(static_folder_path, path)):
-        return send_from_directory(static_folder_path, path)
-    else:
-        index_path = os.path.join(static_folder_path, 'notFound404.html')
-        print(index_path)
-        if os.path.exists(index_path):
-            return send_from_directory(static_folder_path, 'notFound404.html')
-        else:
-            return "index.html not found", 404
-    
 @app.before_request
 def before_request_middleware():
     print(f"Middleware BEFORE: {request.method} {request.path}")

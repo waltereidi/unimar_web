@@ -4,7 +4,6 @@ from backEnd.infrastructure.database import db
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text , create_engine
 from sqlalchemy.orm import sessionmaker
-from injector import inject
 from backEnd.service.login_service import LoginService
 from backEnd.controllers.functool.jwt_authentication import jwtAuthentication
 
@@ -12,13 +11,16 @@ login_bp = Blueprint('login', __name__)
 
 @login_bp.route('/authentication', methods=['POST'])
 def authenticationd(db: SQLAlchemy):
-    service = LoginService(db)
-    result = service.authenticate(request.json)
+    try:
+        service = LoginService(db)
+        result = service.authenticate(request.json)
 
-    if(result.get("success") == False):
-        return jsonify(result  ), 401
-    else :                     
-        return jsonify(result ), 200 
+        return jsonify(result ), 200     
+    
+    except Exception as e :
+        return jsonify("Senha ou Login inválido."  ), 401
+        
+    
 
 @login_bp.route('/validate_token', methods=['POST'])
 @jwtAuthentication

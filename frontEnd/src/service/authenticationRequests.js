@@ -1,5 +1,4 @@
 import { Request } from '@/service/request.js'
-import Toast, { POSITION } from "vue-toastification";
 export class AuthenticationRequests extends Request {
 
     constructor() {
@@ -21,7 +20,7 @@ export class AuthenticationRequests extends Request {
             body,
             headers
         );
-        console.log(res)
+        
         if(res.status === 200  ){
             var body = await res.json();
             
@@ -31,7 +30,6 @@ export class AuthenticationRequests extends Request {
         }
         
         return res
-
     }
 
     async validateToken(token = "")

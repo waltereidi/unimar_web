@@ -13,7 +13,7 @@ CREATE TABLE resultado_lavoura_permanente_importacao (
 
 --PSQL
 \copy resultado_lavoura_permanente_importacao
-FROM PROGRAM 'awk -F";" ''{
+FROM PROGRAM 'awk -F"," ''{
     # número esperado de colunas
     n = 9;
 
@@ -23,14 +23,12 @@ FROM PROGRAM 'awk -F";" ''{
     }
 
     # imprime a linha novamente com ; como separador
-    for(i=1;i<n;i++) printf("%s;", $i);
+    for(i=1;i<n;i++) printf("%s,", $i);
     print $n;
-}'' /home/br_ibge_pam_lavoura_permanente.csv' 
-DELIMITER ';' CSV HEADER;
+}'' /home/br_ibge_pam_lavoura_permanente.csv'  DELIMITER ',' CSV HEADER;
+
 
 ---LIMPEZA DE DADOS
-
-
 INSERT INTO lavoura_permanente (
     ano,
     sigla_uf,
