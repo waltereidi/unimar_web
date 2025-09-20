@@ -4,6 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 # Importa os modelos depois de criar o db
-from .models import User, Books  # substitua pelo nome real do arquivo onde estão os models
+from .models import User, LavouraPermanente # substitua pelo nome real do arquivo onde estão os models
 
-__all__ = ["db", "User", "Books"]
+__all__ = ["db", "User", "LavouraPermanente"]

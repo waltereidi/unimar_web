@@ -1,5 +1,5 @@
 
-CREATE TABLE resultado_lavoura_permanente (
+CREATE TABLE resultado_lavoura_permanente_importacao (
     ano TEXT,
     sigla_uf TEXT,
     id_municipio TEXT,
@@ -12,7 +12,7 @@ CREATE TABLE resultado_lavoura_permanente (
 );
 
 --PSQL
-\copy resultado_lavoura_permanente
+\copy resultado_lavoura_permanente_importacao
 FROM PROGRAM 'awk -F";" ''{
     # número esperado de colunas
     n = 9;
@@ -29,19 +29,9 @@ FROM PROGRAM 'awk -F";" ''{
 DELIMITER ';' CSV HEADER;
 
 ---LIMPEZA DE DADOS
-CREATE TABLE resultado_lavoura_permanente_limpo (
-    ano TEXT,
-    sigla_uf TEXT,
-    id_municipio TEXT,
-    produto TEXT,
-    area_destinada_colheita NUMERIC,
-    area_colhida NUMERIC,
-    quantidade_produzida NUMERIC,
-    rendimento_medio_producao NUMERIC,
-    valor_producao NUMERIC
-);
 
-INSERT INTO resultado_lavoura_permanente_limpo (
+
+INSERT INTO lavoura_permanente (
     ano,
     sigla_uf,
     id_municipio,
@@ -62,4 +52,4 @@ SELECT
     NULLIF(quantidade_produzida,'NULL')::NUMERIC,
     NULLIF(rendimento_medio_producao,'NULL')::NUMERIC,
     NULLIF(valor_producao,'NULL')::NUMERIC
-FROM resultado_lavoura_permanente;
+FROM resultado_lavoura_permanente_importacao;

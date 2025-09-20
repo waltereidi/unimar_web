@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from backEnd.infrastructure.models import db
-from backEnd.infrastructure.database.models import User, Books
+
 from sqlalchemy import text
 from injector import Binder
 from flask_injector import FlaskInjector
@@ -24,7 +24,7 @@ app.config['SECRET_KEY'] = 'asdf#FGSgvasgf$5$WGT'
 app.config['DEBUG'] = True
 CORS(app)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:postgres@db:5432/biblioteca4"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:postgres@db:5432/lavoura"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Debug remoto
