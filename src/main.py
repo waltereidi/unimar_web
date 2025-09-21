@@ -1,22 +1,19 @@
 import os
 import sys
-from flask import Flask, send_from_directory, jsonify, request, session
+import threading
+from flask import Flask, request, session
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-from backEnd.infrastructure.models import db
-
 from sqlalchemy import text
+from backEnd.kernel.routes import RouteRegister
+from backEnd.infrastructure.models import db
 from injector import Binder
 from flask_injector import FlaskInjector
 from flask_caching import Cache
-from flask_jwt_extended import (
-    JWTManager, create_access_token, jwt_required, get_jwt_identity
-)
+from flask_jwt_extended import ( JWTManager )
 
-import threading
-
+#sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'backEnd/defaultPages'))
@@ -24,8 +21,15 @@ app.config['SECRET_KEY'] = 'asdf#FGSgvasgf$5$WGT'
 app.config['DEBUG'] = True
 CORS(app)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:postgres@db:5432/lavoura"
+connectionString = (
+    f"postgresql://{os.environ.get('DATABASE_USERNAME')}:"
+    f"{os.environ.get('DATABASE_PASSWORD')}@db:"
+    f"{os.environ.get('DATABASE_PORT')}/"
+    f"{os.environ.get('DATABASE_NAME')}"
+)
+app.config["SQLALCHEMY_DATABASE_URI"] = connectionString
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+cache = Cache(app)
 
 # Debug remoto
 if os.environ.get("DEBUGPY") == "1":
@@ -50,44 +54,7 @@ with app.app_context():
 
 jwt = JWTManager(app)
 
-# Importar e registrar blueprints das rotas
-def register_blueprints():
-    """Registra todos os blueprints da pasta routes"""
-    routes_path = os.path.join(os.path.dirname(__file__), 'backEnd', 'controllers')
-   
-    # Função para registrar automaticamente novos blueprints
-    def auto_register_blueprints():
-        """Registra automaticamente todos os blueprints encontrados na pasta routes"""
-        import importlib
-        import pkgutil
-        
-        try:
-            # Importar o módulo routes
-            routes_module = importlib.import_module('backEnd.controllers')
-            
-            # Procurar por blueprints em todos os módulos da pasta routes
-            for _, module_name, _ in pkgutil.iter_modules([routes_path]):
-                if module_name != '__init__':
-                    try:
-                        module = importlib.import_module(f'backEnd.controllers.{module_name}')
-                        
-                        # Procurar por atributos que terminam com '_bp' (blueprint)
-                        for attr_name in dir(module):
-                            if attr_name.endswith('_bp'):
-                                blueprint = getattr(module, attr_name)
-                                if hasattr(blueprint, 'name'):
-                                    app.register_blueprint(blueprint, url_prefix=f"/api/{blueprint.name}")
-                                    print(f"✅ Blueprint '{blueprint.name}' registrado automaticamente")
-                    except Exception as e:
-                        print(f"⚠️ Erro ao registrar blueprint do módulo '{module_name}': {e}")
-        except Exception as e:
-            print(f"⚠️ Erro ao registrar blueprints automaticamente: {e}")
-    
-    # Executar registro automático
-    auto_register_blueprints()
-
-# Registrar blueprints
-register_blueprints()
+RouteRegister.register_blueprints(app)
 # Configurar injeção de dependência
 
 def configure(binder: Binder) -> None:
@@ -106,6 +73,8 @@ if __name__ == 'main':
     # Criar tabelas do banco de dados
     app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=True)
 
+
+#Middlewares ------
 @app.before_request
 def before_request_middleware():
     print(f"Middleware BEFORE: {request.method} {request.path}")
