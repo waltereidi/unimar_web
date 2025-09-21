@@ -17,7 +17,7 @@ class LoginService:
         email = EmailVO(json.get("email"))
         password = PasswordVO(json.get("password"))
         
-        if(password.validate()):
+        if(password.validate() == False):
             raise Exception(password)
         
         user = (

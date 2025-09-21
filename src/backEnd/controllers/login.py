@@ -18,17 +18,5 @@ def authenticationd(db: SQLAlchemy):
         return jsonify(result ), 200     
     
     except Exception as e :
-        return jsonify("Senha ou Login inválido."  ), 401
+        return jsonify("Senha ou Login inválidos."  ), 401
         
-    
-
-@login_bp.route('/validate_token', methods=['POST'])
-@jwtAuthentication
-def validate_token():
-    return jsonify( { "success" : True }  ), 200
-    
-    
-@login_bp.route('/logout', methods=['GET'])
-def logout():
-    print('retorno db:')
-    return jsonify({"message": "Logout bem-sucedido"})  
