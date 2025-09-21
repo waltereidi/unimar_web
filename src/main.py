@@ -18,7 +18,7 @@ from flask_jwt_extended import ( JWTManager )
 
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'backEnd/defaultPages'))
 app.config['SECRET_KEY'] = 'asdf#FGSgvasgf$5$WGT'
-app.config['DEBUG'] = True
+isDevelopment = False
 CORS(app)
 
 connectionString = (
@@ -34,17 +34,22 @@ cache = Cache(app)
 # Debug remoto
 if os.environ.get("DEBUGPY") == "1":
     import debugpy
+    isDevelopment = True
+    
+    
     if not getattr(sys, "_debugpy_started", False):
         debugpy.listen(("0.0.0.0", 5678))
         sys._debugpy_started = True
         print("🔹 debugpy listening on port 5678")
         app.config['TEMPLATES_AUTO_RELOAD'] = True
 
+
 config = {
-    "DEBUG": True,          # some Flask specific configs
+    "DEBUG": isDevelopment,          # some Flask specific configs
     "CACHE_TYPE": "SimpleCache",  # Flask-Caching related configs
     "CACHE_DEFAULT_TIMEOUT": 300
 }
+app.config['DEBUG'] = isDevelopment
 
 db.init_app(app)
 migrate = Migrate(app, db)
@@ -68,10 +73,11 @@ def run_watcher():
 FlaskInjector(app=app, modules=[configure])
     
 if __name__ == 'main':
-    watcher_thread = threading.Thread(target=run_watcher, daemon=True)
-    watcher_thread.start()
+    if isDevelopment:
+        watcher_thread = threading.Thread(target=run_watcher, daemon=True)
+        watcher_thread.start()
     # Criar tabelas do banco de dados
-    app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=True)
+    app.run(host="0.0.0.0", port=5000, debug=isDevelopment, use_reloader=isDevelopment)
 
 
 #Middlewares ------

@@ -1,7 +1,7 @@
 services:
   db:
     image: postgres:17
-    container_name: postgres-docker-dev
+    container_name: postgres-docker-prod
     environment:
       POSTGRES_DB: ${DATABASE_NAME}
       POSTGRES_USER: ${DATABASE_USERNAME}
@@ -19,19 +19,19 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.prod
-    container_name: flask-docker-dev
+    container_name: flask-docker-prod
     working_dir: /src
     ports:
       - "5000:5000"
       - "5678:5678"
     depends_on:
       - db
-    command: gunicorn -w 1 -b 0.0.0.0:5000 main:app
+    command: flask run --host=0.0.0.0 --port=5000
     env_file:
       - .env
     environment:
       FLASK_APP: main.py
-      FLASK_ENV: development
+      FLASK_ENV: production
     volumes:
       - ./src:/src
     networks:
@@ -41,7 +41,7 @@ services:
       context: .
       dockerfile: Dockerfile.prod
     image: node:22
-    container_name: vue-docker-dev
+    container_name: vue-docker-prod
     working_dir: /frontEnd
     ports:
       - "5173:5173" # Vite dev server
