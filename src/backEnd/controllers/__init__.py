@@ -4,6 +4,7 @@
 from .user import user_bp
 from .lavoura_permanente import lavoura_permanente_bp
 from .login import login_bp
+from .default_resposes import default_responses_bp
 
 # Lista de todos os blueprints disponíveis
-__all__ = ['user_bp', 'lavoura_permanente_bp' , 'login_bp']
+__all__ = ['user_bp', 'lavoura_permanente_bp' , 'login_bp' , 'default_resposes']

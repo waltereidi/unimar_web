@@ -13,17 +13,27 @@ export class Request  {
     }
     getDefaultHeaders() {
         return {
-        'Content-Type': 'application/json',
-        };
+            "Content-Type": "application/json",
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0",
+            "X-Content-Type-Options": "nosniff",
+            "X-Frame-Options": "DENY",
+            "X-XSS-Protection": "1; mode=block",
+            "Referrer-Policy": "no-referrer-when-downgrade",
+            "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
+            "Access-Control-Allow-Origin": "*", 
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization"
+        }
+
     }
     addHeaders(headers = {}, key, value) {
     return { ...headers, [key]: value };
     }
 
     withAuth(headers = {}) {
-    console.log(headers)
     headers['Authorization'] = `Bearer ${this.authStore.token ?? ""}`;
-    console.log(headers)
     return headers;
     }
 
@@ -34,18 +44,22 @@ export class Request  {
         headers:headers,
         
     });
+
+    if(response.status == 401)
+            this.clearToken()
+        
     return response.json();
     }
 
     async post(endpoint = '', body = {}, headers = {}) {
         headers = this.withAuth(headers);
-
-        const response = fetch(`${this.API_URL}${endpoint}`, {
+            const response = await fetch(`${this.API_URL}${endpoint}`, {
             method: 'POST',
             headers: headers,
             body: JSON.stringify(body),
         });
-    
+        if(response.status == 401)
+            this.clearToken()
         return response;
     }
 }

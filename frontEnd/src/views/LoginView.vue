@@ -37,11 +37,6 @@
         <small v-if="errors.password" class="error">{{ errors.password }}</small>
       </label>
 
-      <label class="remember">
-        <input type="checkbox" v-model="form.remember" />
-        <span>Manter conectado</span>
-      </label>
-
       <button class="submit-btn" :disabled="loading">
         <span v-if="!loading">Entrar</span>
         <span v-else>Entrando...</span>
@@ -50,8 +45,8 @@
       <p v-if="serverError" class="server-error">{{ serverError }}</p>
 
       <p class="links">
-        <a href="#" @click.prevent="$emit('forgot')">Esqueceu a senha?</a>
-        <a href="#" @click.prevent="$emit('register')">Criar conta</a>
+        <!-- <a href="#" @click.prevent="$emit('forgot')">Esqueceu a senha?</a>
+        <a href="#" @click.prevent="$emit('register')">Criar conta</a> -->
       </p>
     </form>
   </div>

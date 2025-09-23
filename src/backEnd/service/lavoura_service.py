@@ -6,12 +6,13 @@ from backEnd.infrastructure.database.models import LavouraPermanente
 from sqlalchemy import text , create_engine , func , case 
 from backEnd.service.criptografia import CriptografiaSimetrica , JWTManager
 from sqlalchemy.orm import Session
+from backEnd.controllers.functool.jwt_authentication import jwtAuthentication
 
 class LavouraService:
     def __init__(self , db: SQLAlchemy):
         self.db = db
 
-
+    @jwtAuthentication
     def rendimento_ponderado_por_uf(self , ano):
         
         subquery = (
@@ -30,6 +31,7 @@ class LavouraService:
         )
         return subquery.all()
     
+    @jwtAuthentication
     def indicadores_agricolas(self, ano: str):
         query = (
             self.db.session.query(

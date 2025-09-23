@@ -11,6 +11,7 @@ import json
 lavoura_permanente_bp = Blueprint('lavoura_permanente', __name__)
 
 @lavoura_permanente_bp.route('/rendimento_ponderado_por_uf', methods=['POST'])
+@jwtAuthentication
 def rendimento_ponderado_por_uf(db: SQLAlchemy):
     service = LavouraService(db)
     resultados = service.rendimento_ponderado_por_uf('2020')
@@ -20,6 +21,8 @@ def rendimento_ponderado_por_uf(db: SQLAlchemy):
     return json.dumps(result, ensure_ascii=False, indent=2) , 200
 
 @lavoura_permanente_bp.route('/indicadores_agricolas' , methods=['POST'])
+@jwtAuthentication
+
 def indicadores_agricolas(db:SQLAlchemy ):
     service = LavouraService(db)
     resultados = service.indicadores_agricolas('2023')
