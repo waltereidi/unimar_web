@@ -6,10 +6,10 @@ from backEnd.controllers.functool.jwt_authentication import jwtAuthentication
 
 open_ai_bp = Blueprint('open_ai', __name__)
 
-@open_ai_bp.route('/openai', methods=['POST'])
-@jwtAuthentication
+@open_ai_bp.route('/GPT5nano_GetResponse', methods=['POST'])
 def authenticationd():
-        
-    return jsonify("result" ), 200     
     
-        
+    service = OpenAiService()
+    result = service.GPT5nano_GetResponse(request.json)
+
+    return jsonify(result ), 200     

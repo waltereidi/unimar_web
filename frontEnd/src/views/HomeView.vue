@@ -28,8 +28,8 @@
         <BarChartLavoura></BarChartLavoura>
       </div>
       <div class="big-card">
-        <span>🌍</span>
-        Gráfico grande (linha, mapa ou tabela)
+          <OpenAiMessage></OpenAiMessage>
+
       </div>
     </main>
   </div>
@@ -39,7 +39,7 @@
 <script>
 import { defineComponent } from "vue"
 import BarChartLavoura from "@/components/BarChartLavoura.vue"
-
+import OpenAiMessage from "@/components/OpenAiMessage.vue"
 export default defineComponent({
   name: "PageWithChart",
   components: {
