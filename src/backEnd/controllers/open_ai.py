@@ -7,6 +7,7 @@ from backEnd.controllers.functool.jwt_authentication import jwtAuthentication
 open_ai_bp = Blueprint('open_ai', __name__)
 
 @open_ai_bp.route('/GPT5nano_GetResponse', methods=['POST'])
+@jwtAuthentication
 def authenticationd():
     
     service = OpenAiService()
