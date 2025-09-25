@@ -25,11 +25,10 @@
     <main>
       <h2>Visão Geral</h2>
       <div class="chart-lavoura">
-        <BarChartLavoura></BarChartLavoura>
+          <BarChartLavoura></BarChartLavoura>
       </div>
       <div class="big-card">
           <OpenAiMessage></OpenAiMessage>
-
       </div>
     </main>
   </div>
@@ -43,7 +42,8 @@ import OpenAiMessage from "@/components/OpenAiMessage.vue"
 export default defineComponent({
   name: "PageWithChart",
   components: {
-    BarChartLavoura
+    BarChartLavoura,
+    OpenAiMessage
   }
 })  
 </script>

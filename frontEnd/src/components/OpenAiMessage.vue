@@ -35,16 +35,11 @@ async function sendMessage() {
 
   try {
     const lavouraRequest = new LavouraRequests()
-    const res =await lavouraRequest.requestOpenAi()
+    const res =await lavouraRequest.requestOpenAi(userMessage.value)
 
-    if (!res.ok) {
-      throw new Error(`Erro na API: ${res.status} ${res.statusText}`);
-    }
-
-    const data = await res.json();
-
+    // const data = await res.json();
     // A OpenAI geralmente retorna a mensagem em data.output[0].content[0].text
-    responseMessage.value = data.output?.[0]?.content?.[0]?.text || "Sem resposta da API.";
+    responseMessage.value = res.message.toString() || "Sem resposta da API.";
 
   } catch (err) {
     errorMessage.value = err.message;
@@ -56,11 +51,11 @@ async function sendMessage() {
 
 <style scoped>
 .openai-message {
-  max-width: 600px;
-  margin: 20px auto;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding:20px;
+  overflow: auto;
 }
 
 .input-message {
@@ -69,6 +64,7 @@ async function sendMessage() {
   border-radius: 6px;
   border: 1px solid #ccc;
   font-size: 14px;
+  min-height: 30px;
 }
 
 .btn-send {

@@ -12,4 +12,4 @@ def authenticationd():
     service = OpenAiService()
     result = service.GPT5nano_GetResponse(request.json)
 
-    return jsonify(result ), 200     
+    return jsonify({"message" :result} ), 200     

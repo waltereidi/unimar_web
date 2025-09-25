@@ -32,9 +32,9 @@ export class LavouraRequests extends Request {
         var body = await res.json();
         return body;
     }
-        async requestOpenAi(  )
+        async requestOpenAi( pergunta )
     {
-        var body = { pergunta : "OpenAi" }
+        var body = { pergunta : pergunta }
         var header = super.getDefaultHeaders(); 
         header = super.withAuth(header);  
         console.log("openAi")
