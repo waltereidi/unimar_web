@@ -6,15 +6,13 @@ from backEnd.infrastructure.database.models import LavouraPermanente
 from sqlalchemy import text , create_engine , func , case 
 from backEnd.service.criptografia import CriptografiaSimetrica , JWTManager
 from sqlalchemy.orm import Session
-from backEnd.controllers.functool.jwt_authentication import jwtAuthentication
 
 class LavouraService:
     def __init__(self , db: SQLAlchemy):
         self.db = db
 
-    @jwtAuthentication
-    def rendimento_ponderado_por_uf(self , ano):
-        
+    def rendimento_ponderado_por_uf(self , json):
+        ano = json.get("ano")
         subquery = (
             self.db.session.query(
                 LavouraPermanente.sigla_uf.label("uf"),
@@ -31,8 +29,10 @@ class LavouraService:
         )
         return subquery.all()
     
-    @jwtAuthentication
-    def indicadores_agricolas(self, ano: str):
+
+    def indicadores_agricolas(self, json: str):
+        ano = json.get("ano")
+        
         query = (
             self.db.session.query(
                 func.sum(LavouraPermanente.area_destinada_colheita).label("total_area_destinada"),
@@ -52,3 +52,13 @@ class LavouraService:
             "total_quantidade": float(result.total_quantidade or 0),
             "rendimento_medio_ponderado": float(result.rendimento_medio_ponderado or 0),
         }
+        
+    def get_anos_disponiveis(self):
+        anos_query = (
+            self.db.session.query(
+                LavouraPermanente.ano
+            )
+            .distinct()
+            .order_by(LavouraPermanente.ano)
+        )
+        return [ano[0] for ano in anos_query.all()]

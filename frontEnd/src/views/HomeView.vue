@@ -196,7 +196,6 @@ export default defineComponent({
 
     .big-card {
       margin-top: 2rem;
-      height: 280px;
       background: white;
       border-radius: 16px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.08);

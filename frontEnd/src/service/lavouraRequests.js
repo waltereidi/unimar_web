@@ -32,18 +32,18 @@ export class LavouraRequests extends Request {
         var body = await res.json();
         return body;
     }
-        async requestOpenAi( pergunta )
+
+    async getAnosDisponiveis( )
     {
-        var body = { pergunta : pergunta }
         var header = super.getDefaultHeaders(); 
         header = super.withAuth(header);  
-        console.log("openAi")
-        var res= await super.post(`/open_ai/GPT5nano_GetResponse` , 
+
+        var res= await super.post(`/lavoura_permanente/get_anos_disponiveis` , 
             body , 
             header
         )
+
         var body = await res.json();
         return body;
     }
-
 }

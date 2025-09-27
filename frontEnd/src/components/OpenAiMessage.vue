@@ -1,6 +1,6 @@
 <template>
   <div class="openai-message">
-    <textarea v-model="userMessage" placeholder="Digite sua mensagem..." rows="3" class="input-message"></textarea>
+    <textarea v-model="userMessage" placeholder="Digite sua mensagem..." rows="5" class="input-message"></textarea>
     <button @click="sendMessage" :disabled="loading" class="btn-send">
       {{ loading ? "Enviando..." : "Enviar" }}
     </button>
@@ -19,7 +19,7 @@
 
 <script setup>
 import { ref } from "vue";
-import { LavouraRequests } from "@/service/lavouraRequests.js"
+import { OpenAiRequests } from "@/service/openAiRequests.js"
 
 const userMessage = ref("");
 const responseMessage = ref("");
@@ -34,7 +34,7 @@ async function sendMessage() {
   errorMessage.value = "";
 
   try {
-    const lavouraRequest = new LavouraRequests()
+    const lavouraRequest = new OpenAiRequests()
     const res =await lavouraRequest.requestOpenAi(userMessage.value)
 
     // const data = await res.json();
@@ -56,6 +56,7 @@ async function sendMessage() {
   gap: 10px;
   padding:20px;
   overflow: auto;
+  width:100%;
 }
 
 .input-message {
